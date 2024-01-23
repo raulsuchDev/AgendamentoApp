@@ -1,23 +1,22 @@
 package com.raulsuchdev.agendamentoapi.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.raulsuchdev.agendamentoapi.dto.AgendamentoDTO;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "AGENDAMENTO")
+@Builder
 public class Agendamento {
 
     @Id
+    @GeneratedValue
     @Column(name = "ID")
     private Long id;
 
@@ -30,16 +29,28 @@ public class Agendamento {
     @Column(name = "VALOR_TRANSFERENCIA")
     private BigDecimal valorTransferencia;
 
-    @Column(name = "TAXA_TRANSFERENCIA")
-    private Float taxaTransferencia;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TAXA_TRANSFERENCIA_ID")
+    private TaxaTransferencia taxaTransferencia;
 
-    @Column(name = "DATA_TRANSFERENCIA")
-    private Date dataTransferencia;
+    @Column(name = "DATA_TRANSFERENCIA", columnDefinition = "TIMESTAMP")
+    private LocalDateTime dataTransferencia;
 
-    @Column(name = "DATA_AGENDAMENTO")
-    private Date dataAgendamento;
+    @Column(name = "DATA_AGENDAMENTO", columnDefinition = "TIMESTAMP")
+    private LocalDateTime dataAgendamento;
 
-    @ManyToOne
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS_ID")
-    private AgendamentoStatus agendamentoStatus;
+    private AgendamentoStatus agendamentoStatus;*/
+
+    public static Agendamento criarNovo(AgendamentoDTO novoAgendamento, TaxaTransferencia taxaTransferencia) {
+        return Agendamento.builder()
+                .contaOrigem(novoAgendamento.getContaOrigem())
+                .contaDestino(novoAgendamento.getContaDestino())
+                .dataAgendamento(novoAgendamento.getDataAgendamento())
+                .dataTransferencia(novoAgendamento.getDataTransferencia())
+                .taxaTransferencia(taxaTransferencia)
+                .valorTransferencia(novoAgendamento.getValorTransferencia())
+                .build();
+    }
 }

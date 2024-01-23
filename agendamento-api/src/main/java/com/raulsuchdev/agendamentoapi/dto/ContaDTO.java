@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsuarioDTO {
-    private String conta;
-    private String nome;
-    private BigDecimal contaValor;
+public class ContaDTO {
+    private String id;
+    private String nomeProprietario;
+    private BigDecimal saldo;
     private String senha;
 }

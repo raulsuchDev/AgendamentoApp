@@ -2,28 +2,30 @@ package com.raulsuchdev.agendamentoapi.service.impl;
 
 import com.raulsuchdev.agendamentoapi.dto.AgendamentoDTO;
 import com.raulsuchdev.agendamentoapi.model.Agendamento;
+import com.raulsuchdev.agendamentoapi.model.TaxaTransferencia;
 import com.raulsuchdev.agendamentoapi.repository.AgendamentoRepository;
 import com.raulsuchdev.agendamentoapi.service.AgendamentoService;
+import com.raulsuchdev.agendamentoapi.service.TaxaTransferenciaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 @RequiredArgsConstructor
 @Slf4j
+@Service
 public class AgendamentoServiceImpl implements AgendamentoService {
 
-    private final ModelMapper modelMapper;
     private final AgendamentoRepository agendamentoRepository;
+    private final TaxaTransferenciaService taxaTransferenciaService;
 
     @Override
-    public void registrarAgendamento(AgendamentoDTO agendamentoRequest) {
+    public void criarAgendamento(AgendamentoDTO novoAgendamento) {
         try {
-            Agendamento agendamento = modelMapper.map(agendamentoRequest, Agendamento.class);
+            Agendamento agendamento = criarNovo(novoAgendamento);
             agendamentoRepository.saveAndFlush(agendamento);
         } catch (Exception e) {
             log.error(e.getMessage(), e.fillInStackTrace());
@@ -31,11 +33,13 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     }
 
     @Override
-    public List<AgendamentoDTO> getUsuarioAgendamento(String contaUsuario) {
+    public List<AgendamentoDTO> buscarAgendamentosPorConta(String contaId) {
         List<Agendamento> agendamentos = null;
 
         try {
-            agendamentos = agendamentoRepository.findByContaOrigem(contaUsuario);
+            agendamentos = agendamentoRepository
+                    .findByContaOrigem(contaId)
+                    .orElseThrow();
         } catch(Exception e) {
             log.error(e.getMessage(), e.fillInStackTrace());
         }
@@ -47,8 +51,32 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     }
 
     @Override
-    public void alterarStatusAgendamento(Long agendamentoId, Integer agendamentoStatus) {
+    public void cancelarAgendamentoDeConta(Long agendamentoId, String contaId) {
 
+    }
+
+    @Override
+    public Agendamento buscarAgendamentoPorId(Long agendamentoId) {
+        return agendamentoRepository
+                .findById(agendamentoId)
+                .orElseThrow();
+    }
+
+    @Override
+    public List<Agendamento> buscarAgendamentosPorStatus(Long agendamentoId, Integer agendamentoStatus) {
+        return null;
+    }
+
+    private Agendamento criarNovo(AgendamentoDTO novoAgendamento) throws Exception {
+        LocalDateTime dataAgendamento = LocalDateTime.now();
+        novoAgendamento.setDataAgendamento(dataAgendamento);
+        TaxaTransferencia taxaTransferencia = taxaTransferenciaService
+                .getTaxaPorIntervaloDias(
+                        novoAgendamento.getDataAgendamento(),
+                        novoAgendamento.getDataTransferencia()
+                );
+
+        return Agendamento.criarNovo(novoAgendamento, taxaTransferencia);
     }
 
 }

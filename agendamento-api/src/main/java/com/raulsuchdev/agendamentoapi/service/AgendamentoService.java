@@ -7,10 +7,14 @@ import java.util.List;
 
 public interface AgendamentoService {
 
-    void registrarAgendamento(AgendamentoDTO agendamento);
+    void criarAgendamento(AgendamentoDTO novoAgendamento);
 
-    List<AgendamentoDTO> getUsuarioAgendamento(String contaUsuario);
+    List<AgendamentoDTO> buscarAgendamentosPorConta(String contaId);
 
-    void alterarStatusAgendamento(Long agendamentoId, Integer agendamentoStatus);
+    void cancelarAgendamentoDeConta(Long agendamentoId, String contaId);
+
+    Agendamento buscarAgendamentoPorId(Long agendamentoId);
+
+    List<Agendamento> buscarAgendamentosPorStatus(Long agendamentoId, Integer agendamentoStatus);
 
 }

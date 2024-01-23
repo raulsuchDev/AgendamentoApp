@@ -1,11 +1,10 @@
 package com.raulsuchdev.agendamentoapi.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.raulsuchdev.agendamentoapi.model.Agendamento;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,20 +16,22 @@ public class AgendamentoDTO {
     private String contaOrigem;
     private String contaDestino;
     private BigDecimal valorTransferencia;
-    private Float taxaTransferencia;
-    private Date dataTransferencia;
-    private Date dataAgendamento;
-    private String agendamentoStatus;
+    private Float porcentagemTaxa;
+    private BigDecimal valorBaseTaxa;
+    private LocalDateTime dataTransferencia;
+    private LocalDateTime dataAgendamento;
+    //private String agendamentoStatus;
 
     public static AgendamentoDTO fromEntity(Agendamento agendamento) {
         return AgendamentoDTO.builder()
                 .id(agendamento.getId())
-                .agendamentoStatus(agendamento.getAgendamentoStatus().getDescricao())
+                //.agendamentoStatus(agendamento.getAgendamentoStatus().getDescricao())
                 .dataAgendamento(agendamento.getDataAgendamento())
                 .dataTransferencia(agendamento.getDataTransferencia())
                 .contaDestino(agendamento.getContaDestino())
                 .contaOrigem(agendamento.getContaOrigem())
-                .taxaTransferencia(agendamento.getTaxaTransferencia())
+                .porcentagemTaxa(agendamento.getTaxaTransferencia().getPorcentagemTaxa())
+                .valorBaseTaxa(agendamento.getTaxaTransferencia().getValorBase())
                 .valorTransferencia(agendamento.getValorTransferencia())
                 .build();
     }
