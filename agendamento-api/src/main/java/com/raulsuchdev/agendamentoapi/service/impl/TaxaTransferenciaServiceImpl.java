@@ -1,5 +1,6 @@
 package com.raulsuchdev.agendamentoapi.service.impl;
 
+import com.raulsuchdev.agendamentoapi.exception.IntervalLimitReachedException;
 import com.raulsuchdev.agendamentoapi.model.TaxaTransferencia;
 import com.raulsuchdev.agendamentoapi.repository.TaxaTransferenciaRepository;
 import com.raulsuchdev.agendamentoapi.service.TaxaTransferenciaService;
@@ -28,12 +29,12 @@ public class TaxaTransferenciaServiceImpl implements TaxaTransferenciaService {
         return taxaTransferencia;
     }
 
-    private Long calcularIntervaloEmDias(LocalDateTime dataAgendamento, LocalDateTime dataTransferencia) throws Exception {
+    private Long calcularIntervaloEmDias(LocalDateTime dataAgendamento, LocalDateTime dataTransferencia) throws IntervalLimitReachedException {
         Duration diferencaDeData = Duration.between(dataAgendamento, dataTransferencia);
         Long diferencaDeDias = diferencaDeData.toDays();
 
         if (diferencaDeDias.longValue() > 50L) {
-            throw new Exception("Intervalo de dias para agendamento maior que o permitido!");
+            throw new IntervalLimitReachedException("Não há taxa aplicável para esse período de agendamento!");
         }
 
         return diferencaDeDias;

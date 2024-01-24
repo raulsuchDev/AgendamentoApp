@@ -1,6 +1,9 @@
 package com.raulsuchdev.agendamentoapi.service.impl;
 
 import com.raulsuchdev.agendamentoapi.dto.AgendamentoDTO;
+import com.raulsuchdev.agendamentoapi.dto.NovoAgendamento;
+import com.raulsuchdev.agendamentoapi.exception.InvalidTransferDateException;
+import com.raulsuchdev.agendamentoapi.exception.NovoAgendamentoInvalidValueException;
 import com.raulsuchdev.agendamentoapi.model.Agendamento;
 import com.raulsuchdev.agendamentoapi.model.TaxaTransferencia;
 import com.raulsuchdev.agendamentoapi.repository.AgendamentoRepository;
@@ -9,10 +12,15 @@ import com.raulsuchdev.agendamentoapi.service.TaxaTransferenciaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -23,13 +31,21 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     private final TaxaTransferenciaService taxaTransferenciaService;
 
     @Override
-    public void criarAgendamento(AgendamentoDTO novoAgendamento) {
+    public void criarAgendamento(NovoAgendamento novoAgendamento) {
         try {
             Agendamento agendamento = criarNovo(novoAgendamento);
             agendamentoRepository.saveAndFlush(agendamento);
         } catch (Exception e) {
             log.error(e.getMessage(), e.fillInStackTrace());
         }
+    }
+
+    @Override
+    public List<AgendamentoDTO> listarAgendamentos() {
+        return agendamentoRepository.findAll()
+                .stream()
+                .map(agendamento -> AgendamentoDTO.fromEntity(agendamento))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -67,16 +83,24 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         return null;
     }
 
-    private Agendamento criarNovo(AgendamentoDTO novoAgendamento) throws Exception {
-        LocalDateTime dataAgendamento = LocalDateTime.now();
-        novoAgendamento.setDataAgendamento(dataAgendamento);
+    private Agendamento criarNovo(NovoAgendamento novoAgendamento) throws Exception {
+        LocalDate dataAgendamento = LocalDate.now();
+        validateTransferDate(dataAgendamento, novoAgendamento.getDataTransferencia());
         TaxaTransferencia taxaTransferencia = taxaTransferenciaService
                 .getTaxaPorIntervaloDias(
-                        novoAgendamento.getDataAgendamento(),
+                        dataAgendamento,
                         novoAgendamento.getDataTransferencia()
                 );
 
-        return Agendamento.criarNovo(novoAgendamento, taxaTransferencia);
+        return Agendamento.criarNovo(novoAgendamento, dataAgendamento, taxaTransferencia);
+    }
+
+    private void validateTransferDate(
+            LocalDate dataAgendamento,
+            LocalDate dataTransferencia) throws InvalidTransferDateException {
+        if (dataTransferencia.isBefore(dataAgendamento)) {
+            throw new InvalidTransferDateException("A data de agendamento não pode ser antes de hoje!");
+        }
     }
 
 }

@@ -1,11 +1,11 @@
 package com.raulsuchdev.agendamentoapi.model;
 
-import com.raulsuchdev.agendamentoapi.dto.AgendamentoDTO;
+import com.raulsuchdev.agendamentoapi.dto.NovoAgendamento;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Agendamento {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;
 
@@ -34,20 +34,20 @@ public class Agendamento {
     private TaxaTransferencia taxaTransferencia;
 
     @Column(name = "DATA_TRANSFERENCIA", columnDefinition = "TIMESTAMP")
-    private LocalDateTime dataTransferencia;
+    private LocalDate dataTransferencia;
 
     @Column(name = "DATA_AGENDAMENTO", columnDefinition = "TIMESTAMP")
-    private LocalDateTime dataAgendamento;
+    private LocalDate dataAgendamento;
 
     /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS_ID")
     private AgendamentoStatus agendamentoStatus;*/
 
-    public static Agendamento criarNovo(AgendamentoDTO novoAgendamento, TaxaTransferencia taxaTransferencia) {
+    public static Agendamento criarNovo(NovoAgendamento novoAgendamento, LocalDate dtAgendamento, TaxaTransferencia taxaTransferencia) {
         return Agendamento.builder()
                 .contaOrigem(novoAgendamento.getContaOrigem())
                 .contaDestino(novoAgendamento.getContaDestino())
-                .dataAgendamento(novoAgendamento.getDataAgendamento())
+                .dataAgendamento(dtAgendamento)
                 .dataTransferencia(novoAgendamento.getDataTransferencia())
                 .taxaTransferencia(taxaTransferencia)
                 .valorTransferencia(novoAgendamento.getValorTransferencia())

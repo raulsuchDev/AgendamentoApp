@@ -1,25 +1,31 @@
 package com.raulsuchdev.agendamentoapi.controller;
 
 import com.raulsuchdev.agendamentoapi.dto.AgendamentoDTO;
+import com.raulsuchdev.agendamentoapi.dto.NovoAgendamento;
 import com.raulsuchdev.agendamentoapi.service.AgendamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/agendamento")
+@RequestMapping("/agendamentos")
 public class AgendamentoController {
 
     private final AgendamentoService agendamentoService;
 
+    @GetMapping
+    public ResponseEntity<List<AgendamentoDTO>> listarAgendamentos() {
+        return ResponseEntity.ok(agendamentoService.listarAgendamentos());
+    }
+
     @PostMapping
-    public ResponseEntity<Void> criarAgendamento(@RequestBody AgendamentoDTO agendamentoDto) {
-        agendamentoService.criarAgendamento(agendamentoDto);
+    public ResponseEntity<Void> criarAgendamento(@Valid @RequestBody NovoAgendamento novoAgendamento) {
+        agendamentoService.criarAgendamento(novoAgendamento);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -4,7 +4,7 @@ import com.raulsuchdev.agendamentoapi.model.Agendamento;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -18,8 +18,8 @@ public class AgendamentoDTO {
     private BigDecimal valorTransferencia;
     private Float porcentagemTaxa;
     private BigDecimal valorBaseTaxa;
-    private LocalDateTime dataTransferencia;
-    private LocalDateTime dataAgendamento;
+    private LocalDate dataTransferencia;
+    private LocalDate dataAgendamento;
     //private String agendamentoStatus;
 
     public static AgendamentoDTO fromEntity(Agendamento agendamento) {

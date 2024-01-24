@@ -9,9 +9,13 @@ import { tap } from 'rxjs';
 })
 export class AgendamentoService {
 
-  private readonly agendamentoApiUrl: string = `${env.apiUrl}/agendamento`
+  private readonly agendamentoApiUrl: string = `${env.apiUrl}/agendamentos`
 
   constructor(private http: HttpClient) { }
+
+  public listarAgendamentos() {
+    return this.http.get(this.agendamentoApiUrl);
+  }
 
   public criarAgendamento(agendamento: Agendamento) {
     return this.http.post(this.agendamentoApiUrl, agendamento)

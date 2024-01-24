@@ -10,4 +10,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
 
     Optional<List<Agendamento>> findByContaOrigem(String contaOrigem);
 
+
+
 }
