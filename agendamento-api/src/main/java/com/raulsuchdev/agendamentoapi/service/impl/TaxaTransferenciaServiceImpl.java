@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -20,8 +20,8 @@ public class TaxaTransferenciaServiceImpl implements TaxaTransferenciaService {
 
     @Override
     public TaxaTransferencia getTaxaPorIntervaloDias(
-        LocalDateTime dataAgendamento,
-        LocalDateTime dataTransferencia
+        LocalDate dataAgendamento,
+        LocalDate dataTransferencia
     ) throws Exception {
         Long intervaloDias = calcularIntervaloEmDias(dataAgendamento, dataTransferencia);
         TaxaTransferencia taxaTransferencia = taxaTransferenciaRepository.getTaxaPorIntervaloDias(intervaloDias);
@@ -29,7 +29,7 @@ public class TaxaTransferenciaServiceImpl implements TaxaTransferenciaService {
         return taxaTransferencia;
     }
 
-    private Long calcularIntervaloEmDias(LocalDateTime dataAgendamento, LocalDateTime dataTransferencia) throws IntervalLimitReachedException {
+    private Long calcularIntervaloEmDias(LocalDate dataAgendamento, LocalDate dataTransferencia) throws IntervalLimitReachedException {
         Duration diferencaDeData = Duration.between(dataAgendamento, dataTransferencia);
         Long diferencaDeDias = diferencaDeData.toDays();
 
