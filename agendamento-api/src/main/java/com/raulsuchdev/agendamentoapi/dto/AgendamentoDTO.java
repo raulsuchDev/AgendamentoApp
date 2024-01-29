@@ -20,12 +20,10 @@ public class AgendamentoDTO {
     private BigDecimal valorBaseTaxa;
     private LocalDate dataTransferencia;
     private LocalDate dataAgendamento;
-    //private String agendamentoStatus;
 
     public static AgendamentoDTO fromEntity(Agendamento agendamento) {
         return AgendamentoDTO.builder()
                 .id(agendamento.getId())
-                //.agendamentoStatus(agendamento.getAgendamentoStatus().getDescricao())
                 .dataAgendamento(agendamento.getDataAgendamento())
                 .dataTransferencia(agendamento.getDataTransferencia())
                 .contaDestino(agendamento.getContaDestino())

@@ -3,11 +3,12 @@ import { AgendamentoService } from '../../core/services/agendamento.service';
 import { Agendamento } from '../../core/dto/agendamento';
 import { CommonModule } from '@angular/common';
 import { map } from 'rxjs';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-pagina-principal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
   templateUrl: './pagina-principal.component.html',
   styleUrl: './pagina-principal.component.scss'
 })
@@ -19,7 +20,7 @@ export class PaginaPrincipalComponent implements OnInit {
   ngOnInit(): void {
     this.agendamentoService.listarAgendamentos()
       .pipe(map(agendamentos => <any>agendamentos))
-      .subscribe(
+      .subscribe( 
         (agendamentos) => this.agendamentos = agendamentos
       );
   }

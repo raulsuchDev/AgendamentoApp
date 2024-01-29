@@ -12,12 +12,4 @@ public interface AgendamentoService {
 
     List<AgendamentoDTO> listarAgendamentos();
 
-    List<AgendamentoDTO> buscarAgendamentosPorConta(String contaId);
-
-    void cancelarAgendamentoDeConta(Long agendamentoId, String contaId);
-
-    Agendamento buscarAgendamentoPorId(Long agendamentoId);
-
-    List<Agendamento> buscarAgendamentosPorStatus(Long agendamentoId, Integer agendamentoStatus);
-
 }

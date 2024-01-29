@@ -1,3 +1,10 @@
 <main class="p-30">
-    
+    @for (agendamento of agendamentos; track $index) {
+        
+    } @empty {
+        <h2>Não há agendamentos feitos!</h2>
+        <section>
+            <a routerLink="/criacao-agendamento" routerLinkActive="active">Criar novo agendamento</a>
+        </section>
+    }
 </main>

@@ -48,41 +48,6 @@ public class AgendamentoServiceImpl implements AgendamentoService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<AgendamentoDTO> buscarAgendamentosPorConta(String contaId) {
-        List<Agendamento> agendamentos = null;
-
-        try {
-            agendamentos = agendamentoRepository
-                    .findByContaOrigem(contaId)
-                    .orElseThrow();
-        } catch(Exception e) {
-            log.error(e.getMessage(), e.fillInStackTrace());
-        }
-
-        return agendamentos
-                .stream()
-                .map(AgendamentoDTO::fromEntity)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public void cancelarAgendamentoDeConta(Long agendamentoId, String contaId) {
-
-    }
-
-    @Override
-    public Agendamento buscarAgendamentoPorId(Long agendamentoId) {
-        return agendamentoRepository
-                .findById(agendamentoId)
-                .orElseThrow();
-    }
-
-    @Override
-    public List<Agendamento> buscarAgendamentosPorStatus(Long agendamentoId, Integer agendamentoStatus) {
-        return null;
-    }
-
     private Agendamento criarNovo(NovoAgendamento novoAgendamento) throws Exception {
         LocalDate dataAgendamento = LocalDate.now();
         validateTransferDate(dataAgendamento, novoAgendamento.getDataTransferencia());
