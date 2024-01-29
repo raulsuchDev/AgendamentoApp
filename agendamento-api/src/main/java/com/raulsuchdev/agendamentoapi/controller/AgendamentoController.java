@@ -1,6 +1,7 @@
 package com.raulsuchdev.agendamentoapi.controller;
 
 import com.raulsuchdev.agendamentoapi.dto.AgendamentoDTO;
+import com.raulsuchdev.agendamentoapi.dto.BaseResponseDTO;
 import com.raulsuchdev.agendamentoapi.dto.NovoAgendamento;
 import com.raulsuchdev.agendamentoapi.service.AgendamentoService;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,9 @@ public class AgendamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> criarAgendamento(@Valid @RequestBody NovoAgendamento novoAgendamento) {
+    public ResponseEntity<BaseResponseDTO> criarAgendamento(@Valid @RequestBody NovoAgendamento novoAgendamento) {
         agendamentoService.criarAgendamento(novoAgendamento);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new BaseResponseDTO(HttpStatus.CREATED, "Agendamento criado com sucesso!"));
     }
 }
