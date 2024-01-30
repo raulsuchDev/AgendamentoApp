@@ -1,10 +1,15 @@
-<main class="p-30">
+<header class="text-center w-full h-28 py-4">
+    <h1>Gerenciador de agendamentos</h1>
+</header>
+<main class="p-8">
     @for (agendamento of agendamentos; track $index) {
-        
+        <pre>{{ agendamento | json }}</pre>
     } @empty {
-        <h2>Não há agendamentos feitos!</h2>
-        <section>
-            <a routerLink="/criacao-agendamento" routerLinkActive="active">Criar novo agendamento</a>
-        </section>
+        <div class="flex flex-col align-center">
+            <h2 class="mb-4 text-center">Não há agendamentos feitos!</h2>
+            <div class="flex justify-center">
+                <a mat-raised-button routerLink="/criacao-agendamento" routerLinkActive="active">Criar novo agendamento</a>
+            </div>
+        </div>
     }
 </main>

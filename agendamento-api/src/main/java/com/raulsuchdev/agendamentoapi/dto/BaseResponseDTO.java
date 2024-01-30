@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 public class BaseResponseDTO<T> {
     private HttpStatus statusCode;
     private String message;
-    private T errorBody;
+    private T resBody;
 
     public BaseResponseDTO(HttpStatus statusCode, String message) {
         this.statusCode = statusCode;

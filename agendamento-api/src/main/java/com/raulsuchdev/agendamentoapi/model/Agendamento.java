@@ -1,6 +1,7 @@
 package com.raulsuchdev.agendamentoapi.model;
 
 import com.raulsuchdev.agendamentoapi.dto.NovoAgendamento;
+import com.raulsuchdev.agendamentoapi.utils.DateUtil;
 import lombok.*;
 
 import javax.persistence.*;
@@ -38,10 +39,6 @@ public class Agendamento {
 
     @Column(name = "DATA_AGENDAMENTO", columnDefinition = "TIMESTAMP")
     private LocalDate dataAgendamento;
-
-    /*@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUS_ID")
-    private AgendamentoStatus agendamentoStatus;*/
 
     public static Agendamento criarNovo(NovoAgendamento novoAgendamento, LocalDate dtAgendamento, TaxaTransferencia taxaTransferencia) {
         return Agendamento.builder()

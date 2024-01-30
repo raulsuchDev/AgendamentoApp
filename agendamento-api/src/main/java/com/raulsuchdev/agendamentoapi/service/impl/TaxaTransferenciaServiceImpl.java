@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -30,8 +31,7 @@ public class TaxaTransferenciaServiceImpl implements TaxaTransferenciaService {
     }
 
     private Long calcularIntervaloEmDias(LocalDate dataAgendamento, LocalDate dataTransferencia) throws IntervalLimitReachedException {
-        Duration diferencaDeData = Duration.between(dataAgendamento, dataTransferencia);
-        Long diferencaDeDias = diferencaDeData.toDays();
+        Long diferencaDeDias = ChronoUnit.DAYS.between(dataAgendamento, dataTransferencia);
 
         if (diferencaDeDias.longValue() > 50L) {
             throw new IntervalLimitReachedException("Não há taxa aplicável para esse período de agendamento!");

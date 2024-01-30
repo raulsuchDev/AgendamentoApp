@@ -2,6 +2,7 @@ package com.raulsuchdev.agendamentoapi.service.impl;
 
 import com.raulsuchdev.agendamentoapi.dto.AgendamentoDTO;
 import com.raulsuchdev.agendamentoapi.dto.NovoAgendamento;
+import com.raulsuchdev.agendamentoapi.exception.ContasIguaisException;
 import com.raulsuchdev.agendamentoapi.exception.InvalidTransferDateException;
 import com.raulsuchdev.agendamentoapi.exception.NovoAgendamentoInvalidValueException;
 import com.raulsuchdev.agendamentoapi.model.Agendamento;
@@ -9,6 +10,7 @@ import com.raulsuchdev.agendamentoapi.model.TaxaTransferencia;
 import com.raulsuchdev.agendamentoapi.repository.AgendamentoRepository;
 import com.raulsuchdev.agendamentoapi.service.AgendamentoService;
 import com.raulsuchdev.agendamentoapi.service.TaxaTransferenciaService;
+import com.raulsuchdev.agendamentoapi.utils.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
             Agendamento agendamento = criarNovo(novoAgendamento);
             agendamentoRepository.saveAndFlush(agendamento);
         } catch (Exception e) {
+            log.info("Service:" + novoAgendamento.getDataTransferencia().toString());
             log.error(e.getMessage(), e.fillInStackTrace());
         }
     }
@@ -50,6 +53,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     private Agendamento criarNovo(NovoAgendamento novoAgendamento) throws Exception {
         LocalDate dataAgendamento = LocalDate.now();
+        validateContas(novoAgendamento.getContaOrigem(), novoAgendamento.getContaDestino());
         validateTransferDate(dataAgendamento, novoAgendamento.getDataTransferencia());
         TaxaTransferencia taxaTransferencia = taxaTransferenciaService
                 .getTaxaPorIntervaloDias(
@@ -65,6 +69,12 @@ public class AgendamentoServiceImpl implements AgendamentoService {
             LocalDate dataTransferencia) throws InvalidTransferDateException {
         if (dataTransferencia.isBefore(dataAgendamento)) {
             throw new InvalidTransferDateException("A data de agendamento não pode ser antes de hoje!");
+        }
+    }
+
+    private void validateContas(String contaOrigem, String contaDestino) throws ContasIguaisException {
+        if(contaOrigem.equals(contaDestino)) {
+            throw new ContasIguaisException();
         }
     }
 

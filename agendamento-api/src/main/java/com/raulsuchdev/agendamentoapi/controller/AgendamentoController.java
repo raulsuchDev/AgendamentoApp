@@ -5,6 +5,7 @@ import com.raulsuchdev.agendamentoapi.dto.BaseResponseDTO;
 import com.raulsuchdev.agendamentoapi.dto.NovoAgendamento;
 import com.raulsuchdev.agendamentoapi.service.AgendamentoService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/agendamentos")
+@Slf4j
 public class AgendamentoController {
 
     private final AgendamentoService agendamentoService;
@@ -25,9 +27,10 @@ public class AgendamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseResponseDTO> criarAgendamento(@Valid @RequestBody NovoAgendamento novoAgendamento) {
+    public ResponseEntity<String> criarAgendamento(@Valid @RequestBody NovoAgendamento novoAgendamento) {
+        log.info("Controller: " + novoAgendamento.getDataTransferencia().toString());
         agendamentoService.criarAgendamento(novoAgendamento);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new BaseResponseDTO(HttpStatus.CREATED, "Agendamento criado com sucesso!"));
+                .body("Agendamento criado com sucesso!");
     }
 }

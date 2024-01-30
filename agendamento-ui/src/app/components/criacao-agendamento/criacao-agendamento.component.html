@@ -1,1 +1,83 @@
-<p>criacao-agendamento works!</p>
+<div class="p-8 h-full flex justify-center">
+    <mat-card class="h-full w-1/2 flex flex-col align-center">
+        <mat-card-header>
+            <mat-card-header>
+                <h1>Novo agendamento</h1>
+            </mat-card-header>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="formGroup" class="flex flex-col justify-center">
+                <mat-form-field>
+                    <mat-label>Conta de origem</mat-label>
+                    <input type="text" formControlName="contaOrigem" matInput>
+                    @if(control('contaOrigem')?.dirty && control('contaOrigem')?.invalid) {
+                        <ng-container [ngTemplateOutlet]="contaFieldErrors" 
+                            [ngTemplateOutletContext]="{$implicit: control('contaOrigem')}"></ng-container>
+                    }
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Conta de destino</mat-label>
+                    <input type="text" formControlName="contaDestino" matInput>
+                </mat-form-field>
+                @if(control('contaDestino')?.dirty && control('contaDestino')?.invalid) {
+                    <ng-container [ngTemplateOutlet]="contaFieldErrors" 
+                        [ngTemplateOutletContext]="{$implicit: control('contaDestino')}"></ng-container>
+                }
+                <mat-form-field>
+                    <mat-label>Valor da transferência</mat-label>
+                    <input type="number" formControlName="valorTransferencia" matInput>
+                    @if (control('contaDestino')?.hasError('min')) {
+                        <mat-error>O valor mínimo para transferência deve ser de {{ minimumTransferValue | currency: 'BRL' }}</mat-error>
+                    } @else if (control('contaDestino')?.hasError('required')) {
+                        <mat-error>
+                            <ng-container [ngTemplateOutlet]="requiredError"></ng-container>
+                        </mat-error>
+                    }
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Data da transferência</mat-label>
+                    <input formControlName="dataTransferencia" matInput [matDatepicker]="picker">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker startView="month" [startAt]="today"></mat-datepicker>
+                    @if (control('dataTransferencia')?.hasError('dateBeforeToday')) {
+                        <mat-error>A data deve ser igual ou maior a data de hoje</mat-error>
+                    } @else if (control('dataTransferencia')?.hasError('required')) {
+                        <mat-error>
+                            <ng-container [ngTemplateOutlet]="requiredError"></ng-container>
+                        </mat-error>
+                    }
+                </mat-form-field>
+                @if (formGroup.hasError('sameAccountId')) {
+                    <section class="mt-2">
+                        <mat-error>A conta de origem deve ser diferente da conta de destino</mat-error>
+                    </section>
+                }
+            </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <div class="flex flex-col w-full items-center justify-center">
+                <div class="flex flex-col">
+                    <button class="mb-3 min-w-64" mat-raised-button color="primary" (click)="criarNovoAgendamento($event)">Criar novo agendamento</button>
+                    <button class="flex-none min-w-64" mat-stroked-button color="primary" (click)="cancelar()">Cancelar</button>
+                </div>
+            </div>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+<ng-template #contaFieldErrors let-controlName>
+    <mat-error class="mb-4">
+        @if (control(controlName)?.hasError('pattern')) {
+            Conta inválida
+        } @else if (
+            control(controlName)?.hasError('minLength') ||
+            control(controlName)?.hasError('maxLength')
+        ) {
+            A conta deve conter exatamente 10 caracteres
+        } @else {
+            <ng-container [ngTemplateOutlet]="requiredError"></ng-container>
+        }
+    </mat-error>
+</ng-template>
+
+<ng-template #requiredError>Campo obrigatório</ng-template>

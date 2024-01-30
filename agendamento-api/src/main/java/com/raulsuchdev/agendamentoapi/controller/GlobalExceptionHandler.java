@@ -1,6 +1,7 @@
 package com.raulsuchdev.agendamentoapi.controller;
 
 import com.raulsuchdev.agendamentoapi.dto.BaseResponseDTO;
+import com.raulsuchdev.agendamentoapi.exception.ContasIguaisException;
 import com.raulsuchdev.agendamentoapi.exception.IntervalLimitReachedException;
 import com.raulsuchdev.agendamentoapi.exception.InvalidTransferDateException;
 import org.springframework.http.HttpStatus;
@@ -17,10 +18,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<BaseResponseDTO> exception(Exception e) {
-        return ResponseEntity.internalServerError().body(
-                new BaseResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "Erro no servidor!")
-        );
+    public ResponseEntity<Map<String, String>> exception(Exception e) {
+        return ResponseEntity.internalServerError().body(Map.of(e.getMessage(), e.fillInStackTrace().toString()));
     }
 
     @ExceptionHandler(IntervalLimitReachedException.class)
@@ -47,6 +46,13 @@ public class GlobalExceptionHandler {
         });
         return ResponseEntity.badRequest().body(
                 new BaseResponseDTO<>(HttpStatus.BAD_REQUEST, "Erro na validação da requisição!", errors)
+        );
+    }
+
+    @ExceptionHandler(ContasIguaisException.class)
+    public ResponseEntity<BaseResponseDTO> handleContasIguaisException(ContasIguaisException e) {
+        return ResponseEntity.badRequest().body(
+                new BaseResponseDTO(HttpStatus.BAD_REQUEST, e.getMessage())
         );
     }
 }

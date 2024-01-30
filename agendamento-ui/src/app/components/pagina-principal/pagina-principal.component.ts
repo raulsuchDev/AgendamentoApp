@@ -1,14 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AgendamentoService } from '../../core/services/agendamento.service';
-import { Agendamento } from '../../core/dto/agendamento';
+import { Agendamento } from '../../core/dto/agendamento.dto';
 import { CommonModule } from '@angular/common';
 import { map } from 'rxjs';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-pagina-principal',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatButtonModule],
   templateUrl: './pagina-principal.component.html',
   styleUrl: './pagina-principal.component.scss'
 })
