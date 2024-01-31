@@ -2,10 +2,10 @@
 Aplicação que cria e lista agendamentos.
 
 ## 1 - Versões
-Java: v11.0.19
-Maven: v3.9.6
-Spring-boot: v2.7.18
-Node.js: v20.11.0
+Java: v11.0.19 <br />
+Maven: v3.9.6 <br />
+Spring-boot: v2.7.18 <br />
+Node.js: v20.11.0 <br />
 NPM: v10.2.4
 
 ## 1.1 - Decisões Arquiteturais e ferramentas
