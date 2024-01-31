@@ -1,15 +1,29 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, LOCALE_ID, OnInit, inject } from '@angular/core';
 import { AgendamentoService } from '../../core/services/agendamento.service';
 import { Agendamento } from '../../core/dto/agendamento.dto';
 import { CommonModule } from '@angular/common';
-import { map } from 'rxjs';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule } from "@angular/material/card";
+import { MatListModule } from "@angular/material/list";
+import { MatDividerModule } from '@angular/material/divider';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-pagina-principal',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive, MatButtonModule],
+  imports: [
+    CommonModule, 
+    RouterOutlet, 
+    RouterLink, 
+    RouterLinkActive, 
+    MatButtonModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatListModule,
+    MatDividerModule
+  ],
   templateUrl: './pagina-principal.component.html',
   styleUrl: './pagina-principal.component.scss'
 })
@@ -20,7 +34,16 @@ export class PaginaPrincipalComponent implements OnInit {
 
   ngOnInit(): void {
     this.agendamentoService.listarAgendamentos()
-      .pipe(map(agendamentos => <any>agendamentos))
+      .pipe(
+        map(agendamentos => {
+          return agendamentos.map(
+            agendamento => {
+              agendamento.porcentagemTaxa = String(agendamento.porcentagemTaxa);
+              return agendamento;
+            }
+          );
+        })
+      )
       .subscribe( 
         (agendamentos) => this.agendamentos = agendamentos
       );

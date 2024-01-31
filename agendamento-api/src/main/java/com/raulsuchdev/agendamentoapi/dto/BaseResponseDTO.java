@@ -1,16 +1,14 @@
 package com.raulsuchdev.agendamentoapi.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
-public class BaseResponseDTO<T> {
+@Getter
+@Setter
+public class BaseResponseDTO {
     private HttpStatus statusCode;
     private String message;
-    private T resBody;
-
-    public BaseResponseDTO(HttpStatus statusCode, String message) {
-        this.statusCode = statusCode;
-        this.message = message;
-    }
 }

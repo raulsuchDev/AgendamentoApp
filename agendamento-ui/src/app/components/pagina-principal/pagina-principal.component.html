@@ -1,15 +1,63 @@
-<header class="text-center w-full h-28 py-4">
-    <h1>Gerenciador de agendamentos</h1>
+<header>
+    <mat-toolbar color="primary">
+        <h1 class="text-center w-full">Gerenciador de agendamentos</h1>
+    </mat-toolbar>
 </header>
 <main class="p-8">
-    @for (agendamento of agendamentos; track $index) {
-        <pre>{{ agendamento | json }}</pre>
-    } @empty {
-        <div class="flex flex-col align-center">
-            <h2 class="mb-4 text-center">Não há agendamentos feitos!</h2>
-            <div class="flex justify-center">
-                <a mat-raised-button routerLink="/criacao-agendamento" routerLinkActive="active">Criar novo agendamento</a>
-            </div>
-        </div>
+    @if (agendamentos.length > 0) {
+        <ng-container [ngTemplateOutlet]="criarAgendamento"></ng-container>
     }
+    <mat-card>
+        <mat-card-header>
+            <h1 class="w-full text-center">Agendamentos feitos</h1>
+        </mat-card-header>
+        <mat-card-content>
+                @for (agendamento of agendamentos; track $index; let last = $last) {
+                    <div class="flex justify-around agendamento-group">
+                        <section>
+                            <h3>Data de transferência</h3>
+                            <p>{{ agendamento.dataTransferencia | date: 'dd/MM/yyyy'}}</p>
+                        </section>
+                        <section>
+                            <h3>Data de criação do agendamento</h3>
+                            <p>{{ agendamento.dataAgendamento | date: 'dd/MM/yyyy' }}</p>
+                        </section>
+                        <section>
+                            <h3>Conta de origem</h3>
+                            <p>{{ agendamento.contaOrigem }}</p>
+                        </section>
+                        <section>
+                            <h3>Conta de destino</h3>
+                            <p>{{ agendamento.contaDestino }}</p>
+                        </section>
+                        <section>
+                            <h3>Valor da transferência</h3>
+                            <p>{{ agendamento.valorTransferencia | currency: 'BRL' }}</p>
+                        </section>
+                        <section>
+                            <h3>Porcentagem de taxa</h3>
+                            <p>{{ agendamento.porcentagemTaxa | number : '1.0-2' }}%</p>
+                        </section>
+                        <section>
+                            <h3>Valor da taxa base</h3>
+                            <p>{{ agendamento.valorBaseTaxa | currency: 'BRL' }}</p>
+                        </section>
+                    </div>
+                    <div class="my-4" *ngIf="!last">
+                        <mat-divider></mat-divider>
+                    </div>
+                } @empty {
+                    <div class="flex flex-col align-center">
+                        <h2 class="mb-4 text-center">Não há agendamentos feitos!</h2>
+                        <ng-container [ngTemplateOutlet]="criarAgendamento"></ng-container>
+                    </div>
+                }
+        </mat-card-content>
+    </mat-card>
 </main>
+
+<ng-template #criarAgendamento>
+    <section class="flex justify-center my-8">
+        <a mat-raised-button routerLink="/criacao-agendamento" routerLinkActive="active">Criar novo agendamento</a>
+    </section>
+</ng-template>

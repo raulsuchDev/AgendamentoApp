@@ -27,10 +27,11 @@ public class AgendamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<String> criarAgendamento(@Valid @RequestBody NovoAgendamento novoAgendamento) {
-        log.info("Controller: " + novoAgendamento.getDataTransferencia().toString());
+    public ResponseEntity<BaseResponseDTO> criarAgendamento(@Valid @RequestBody NovoAgendamento novoAgendamento) {
         agendamentoService.criarAgendamento(novoAgendamento);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body("Agendamento criado com sucesso!");
+                .body(
+                        new BaseResponseDTO(HttpStatus.CREATED, "Agendamento criado com sucesso!")
+                );
     }
 }

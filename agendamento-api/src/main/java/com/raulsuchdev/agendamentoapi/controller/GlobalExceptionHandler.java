@@ -1,6 +1,8 @@
 package com.raulsuchdev.agendamentoapi.controller;
 
 import com.raulsuchdev.agendamentoapi.dto.BaseResponseDTO;
+import com.raulsuchdev.agendamentoapi.dto.BaseResponseData;
+import com.raulsuchdev.agendamentoapi.exception.AgendamentoJaExisteException;
 import com.raulsuchdev.agendamentoapi.exception.ContasIguaisException;
 import com.raulsuchdev.agendamentoapi.exception.IntervalLimitReachedException;
 import com.raulsuchdev.agendamentoapi.exception.InvalidTransferDateException;
@@ -17,9 +19,11 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> exception(Exception e) {
-        return ResponseEntity.internalServerError().body(Map.of(e.getMessage(), e.fillInStackTrace().toString()));
+    @ExceptionHandler({Exception.class,RuntimeException.class})
+    public ResponseEntity<Map<HttpStatus, String>> exception(Exception e) {
+        return ResponseEntity.internalServerError().body(
+                Map.of(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage())
+        );
     }
 
     @ExceptionHandler(IntervalLimitReachedException.class)
@@ -37,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<BaseResponseDTO> handleValidationExceptions(MethodArgumentNotValidException e) {
+    public ResponseEntity<BaseResponseData<Map<String, String>>> handleValidationExceptions(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -45,12 +49,19 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
         return ResponseEntity.badRequest().body(
-                new BaseResponseDTO<>(HttpStatus.BAD_REQUEST, "Erro na validação da requisição!", errors)
+                new BaseResponseData<>(HttpStatus.BAD_REQUEST, "Erro na validação da requisição!", errors)
         );
     }
 
     @ExceptionHandler(ContasIguaisException.class)
     public ResponseEntity<BaseResponseDTO> handleContasIguaisException(ContasIguaisException e) {
+        return ResponseEntity.badRequest().body(
+                new BaseResponseDTO(HttpStatus.BAD_REQUEST, e.getMessage())
+        );
+    }
+
+    @ExceptionHandler(AgendamentoJaExisteException.class)
+    public ResponseEntity<BaseResponseDTO> handleAgendamentoJaExisteException(AgendamentoJaExisteException e) {
         return ResponseEntity.badRequest().body(
                 new BaseResponseDTO(HttpStatus.BAD_REQUEST, e.getMessage())
         );

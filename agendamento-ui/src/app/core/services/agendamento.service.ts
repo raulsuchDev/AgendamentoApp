@@ -15,8 +15,8 @@ export class AgendamentoService {
 
   constructor(private http: HttpClient) { }
 
-  public listarAgendamentos() {
-    return this.http.get(this.agendamentoApiUrl);
+  public listarAgendamentos(): Observable<Agendamento[]> {
+    return this.http.get<Agendamento[]>(this.agendamentoApiUrl);
   }
 
   public criarAgendamento(agendamento: NovoAgendamento): Observable<BaseResponse<undefined>> {

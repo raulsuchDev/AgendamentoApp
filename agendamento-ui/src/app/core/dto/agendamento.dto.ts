@@ -1,12 +1,11 @@
-import { DateTime } from "luxon";
 
 export class Agendamento {
     id?: number;
     contaOrigem?: string;
     contaDestino?: string;
     valorTransferencia?: number;
-    porcentagemTaxa?: number;
+    porcentagemTaxa?: number | string | null | undefined;
     valorBaseTaxa?: number;
-    dataTransferencia?: string;
-    dataAgendamento?: Date;
+    dataTransferencia?: string | null;
+    dataAgendamento?: string;
 }
