@@ -1,7 +1,6 @@
 package com.raulsuchdev.agendamentoapi.model;
 
 import com.raulsuchdev.agendamentoapi.dto.NovoAgendamento;
-import com.raulsuchdev.agendamentoapi.utils.DateUtil;
 import lombok.*;
 
 import javax.persistence.*;
