@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment as env } from '../../../environments/environment.dev';
 import { Agendamento } from '../dto/agendamento.dto';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NovoAgendamento } from '../types/novo-agendamento.type';
 import { BaseResponse } from '../dto/base-response.dto';
 
@@ -20,7 +20,6 @@ export class AgendamentoService {
   }
 
   public criarAgendamento(agendamento: NovoAgendamento): Observable<BaseResponse<undefined>> {
-    return this.http.post<BaseResponse<undefined>>(this.agendamentoApiUrl, agendamento)
-      .pipe(tap(res => console.log(res)));
+    return this.http.post<BaseResponse<undefined>>(this.agendamentoApiUrl, agendamento);
   }
 }

@@ -33,29 +33,18 @@ export class PaginaPrincipalComponent implements OnInit {
   agendamentos: Agendamento[] = [];
 
   ngOnInit(): void {
-    this.agendamentoService.listarAgendamentos()
-      .pipe(
-        map(agendamentos => {
-          return agendamentos.map(
-            agendamento => {
-              agendamento.porcentagemTaxa = String(agendamento.porcentagemTaxa);
-              return agendamento;
-            }
-          );
-        })
-      )
-      .subscribe( 
-        (agendamentos) => this.agendamentos = agendamentos
-      );
+    this.agendamentoService.listarAgendamentos().subscribe(
+      (agendamentos) => this.agendamentos = agendamentos);
   }
 
   getValorTotal(agd: Agendamento): number {
-    const vtr: number = agd?.valorTransferencia ?? 0;
+    const vtr: number = agd?.valorTransferencia ?? 0;    
     const pt: number = agd?.porcentagemTaxa && 
-      !Number.isNaN(agd.porcentagemTaxa) && 
       Number(agd.porcentagemTaxa) > 0 ?
       Number(agd.porcentagemTaxa) / 100 : 0;
+    
     const vbt: number = agd?.valorBaseTaxa ?? 0;
+    
     return vtr + (vtr * pt) + vbt;
   }
 }

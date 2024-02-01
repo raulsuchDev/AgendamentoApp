@@ -112,7 +112,6 @@ export class CriacaoAgendamentoComponent {
           this.router.navigateByUrl('/pagina-principal');
         },
         error: err => {
-          console.log(err)
           this._snackbar.open(err?.error?.message || 'Ocorreu um erro na criação de agendamento', 'OK');
         },
         complete: () => this.submittingForm = true

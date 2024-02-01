@@ -13,7 +13,7 @@
         </mat-card-header>
         <mat-card-content>
                 @for (agendamento of agendamentos; track $index; let last = $last) {
-                    <div class="flex justify-around agendamento-group">
+                    <div class="flex flex-col md:flex-row md:justify-around md:flex-wrap agendamento-group">
                         <section>
                             <h3>Data de transferência</h3>
                             <p>{{ agendamento.dataTransferencia | date: 'dd/MM/yyyy'}}</p>
@@ -36,7 +36,10 @@
                         </section>
                         <section>
                             <h3>Porcentagem de taxa(PT)</h3>
-                            <p>{{ agendamento.porcentagemTaxa | number : '1.0-2' }}%</p>
+                            <p>{{ 
+                                (agendamento.porcentagemTaxa | number : '1.0-2' : 'pt') +
+                                (agendamento.porcentagemTaxa > 0 ? '%' : '') }}
+                            </p>
                         </section>
                         <section>
                             <h3>Valor da taxa base(VTB)</h3>

@@ -1,15 +1,15 @@
 <div class="p-8 flex justify-center">
-    <mat-card class="w-1/2 flex flex-col align-center pb-3">
+    <mat-card class="w-full sm:w-3/4 md:w-4/5 lg:w-1/2 flex flex-col align-center pb-3">
         <mat-card-header>
             <h1 class="text-center w-full">Novo agendamento</h1>
         </mat-card-header>
         <mat-card-content>
-            <form [formGroup]="formGroup" class="flex flex-col justify-center gap-5">
+            <form [formGroup]="formGroup" class="flex flex-col justify-center gap-8 sm:gap-5">
                 <mat-form-field>
                     <mat-label>Conta de origem</mat-label>
                     <input type="text" formControlName="contaOrigem" 
                         placeholder="Insira a conta de origem" matInput>
-                    <mat-hint>A conta deve ter 10 caracteres e conter somente números</mat-hint>
+                    <mat-hint class="mb-3">A conta deve ter 10 caracteres e conter somente números</mat-hint>
                     <mat-error>
                         @if(control('contaOrigem')?.touched && control('contaOrigem')?.invalid) {
                             <ng-container [ngTemplateOutlet]="contaFieldErrors" 

@@ -4,8 +4,8 @@ export class Agendamento {
     contaOrigem?: string;
     contaDestino?: string;
     valorTransferencia?: number;
-    porcentagemTaxa?: number | string | null | undefined;
+    porcentagemTaxa?: number;
     valorBaseTaxa?: number;
-    dataTransferencia?: string | null;
+    dataTransferencia?: string;
     dataAgendamento?: string;
 }
