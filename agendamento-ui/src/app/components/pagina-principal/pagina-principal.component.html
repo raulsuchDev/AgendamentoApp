@@ -31,16 +31,20 @@
                             <p>{{ agendamento.contaDestino }}</p>
                         </section>
                         <section>
-                            <h3>Valor da transferência</h3>
+                            <h3>Valor da transferência(VTR)</h3>
                             <p>{{ agendamento.valorTransferencia | currency: 'BRL' }}</p>
                         </section>
                         <section>
-                            <h3>Porcentagem de taxa</h3>
+                            <h3>Porcentagem de taxa(PT)</h3>
                             <p>{{ agendamento.porcentagemTaxa | number : '1.0-2' }}%</p>
                         </section>
                         <section>
-                            <h3>Valor da taxa base</h3>
+                            <h3>Valor da taxa base(VTB)</h3>
                             <p>{{ agendamento.valorBaseTaxa | currency: 'BRL' }}</p>
+                        </section>
+                        <section>
+                            <h3>Valor total(VTR + (VTR x PT) + VTB)</h3>
+                            <p>{{ getValorTotal(agendamento) | currency: 'BRL' }}</p>
                         </section>
                     </div>
                     <div class="my-4" *ngIf="!last">

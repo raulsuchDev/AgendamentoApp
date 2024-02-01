@@ -48,4 +48,14 @@ export class PaginaPrincipalComponent implements OnInit {
         (agendamentos) => this.agendamentos = agendamentos
       );
   }
+
+  getValorTotal(agd: Agendamento): number {
+    const vtr: number = agd?.valorTransferencia ?? 0;
+    const pt: number = agd?.porcentagemTaxa && 
+      !Number.isNaN(agd.porcentagemTaxa) && 
+      Number(agd.porcentagemTaxa) > 0 ?
+      Number(agd.porcentagemTaxa) / 100 : 0;
+    const vbt: number = agd?.valorBaseTaxa ?? 0;
+    return vtr + (vtr * pt) + vbt;
+  }
 }

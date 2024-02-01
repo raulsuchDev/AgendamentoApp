@@ -15,6 +15,7 @@ import { NovoAgendamento } from '../../core/types/novo-agendamento.type';
 import { AgendamentoService } from '../../core/services/agendamento.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { NgxCurrencyDirective } from "ngx-currency";
+import { Agendamento } from '../../core/dto/agendamento.dto';
 
 @Component({
   selector: 'app-criacao-agendamento',
@@ -110,7 +111,10 @@ export class CriacaoAgendamentoComponent {
           this._snackbar.open(res.message, 'OK');
           this.router.navigateByUrl('/pagina-principal');
         },
-        error: err => this._snackbar.open('Ocorreu um erro na criação de agendamento', 'OK'),
+        error: err => {
+          console.log(err)
+          this._snackbar.open(err?.error?.message || 'Ocorreu um erro na criação de agendamento', 'OK');
+        },
         complete: () => this.submittingForm = true
       });
   }
