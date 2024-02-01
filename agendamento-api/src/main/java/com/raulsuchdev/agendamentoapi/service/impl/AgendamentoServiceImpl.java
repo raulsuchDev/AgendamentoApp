@@ -11,6 +11,7 @@ import com.raulsuchdev.agendamentoapi.repository.AgendamentoRepository;
 import com.raulsuchdev.agendamentoapi.service.AgendamentoService;
 import com.raulsuchdev.agendamentoapi.service.TaxaTransferenciaService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -30,23 +31,19 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     @Override
     public void criarAgendamento(NovoAgendamento novoAgendamento) {
-        try {
-            Agendamento agendamento = criarNovo(novoAgendamento);
-            agendamentoRepository.saveAndFlush(agendamento);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e.fillInStackTrace());
-        }
+        Agendamento agendamento = criarNovo(novoAgendamento);
+        agendamentoRepository.saveAndFlush(agendamento);
     }
 
     @Override
     public List<AgendamentoDTO> listarAgendamentos() {
         return agendamentoRepository.findAll()
                 .stream()
-                .map(agendamento -> AgendamentoDTO.fromEntity(agendamento))
+                .map(AgendamentoDTO::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    private Agendamento criarNovo(NovoAgendamento novoAgendamento) throws Exception {
+    private Agendamento criarNovo(NovoAgendamento novoAgendamento) {
         LocalDate dataAgendamento = LocalDate.now();
         validateContas(novoAgendamento.getContaOrigem(), novoAgendamento.getContaDestino());
         validateTransferDate(dataAgendamento, novoAgendamento.getDataTransferencia());

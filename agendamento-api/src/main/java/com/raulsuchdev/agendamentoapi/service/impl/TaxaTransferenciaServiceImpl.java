@@ -22,7 +22,7 @@ public class TaxaTransferenciaServiceImpl implements TaxaTransferenciaService {
     public TaxaTransferencia getTaxaPorIntervaloDias(
         LocalDate dataAgendamento,
         LocalDate dataTransferencia
-    ) throws Exception {
+    ) {
         Long intervaloDias = calcularIntervaloEmDias(dataAgendamento, dataTransferencia);
         TaxaTransferencia taxaTransferencia = taxaTransferenciaRepository.getTaxaPorIntervaloDias(intervaloDias);
 

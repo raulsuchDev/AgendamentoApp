@@ -1,6 +1,6 @@
 package com.raulsuchdev.agendamentoapi.exception;
 
-public class InvalidTransferDateException extends Exception {
+public class InvalidTransferDateException extends RuntimeException {
 
     public InvalidTransferDateException(String message) {
         super(message);

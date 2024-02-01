@@ -23,6 +23,7 @@ public class NovoAgendamento {
 
     @NotNull(message = "Inserir valor da transferência")
     @DecimalMin(value = "0.01", message = "O valor da transferência deve à partir R$ 0,01!")
+    @DecimalMax(value = "99999999999999999.99")
     private BigDecimal valorTransferencia;
 
     @NotNull(message = "Inserir data de transferência!")

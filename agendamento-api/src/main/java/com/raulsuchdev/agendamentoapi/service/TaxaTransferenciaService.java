@@ -6,6 +6,6 @@ import java.time.LocalDate;
 
 public interface TaxaTransferenciaService {
 
-    TaxaTransferencia getTaxaPorIntervaloDias(LocalDate dataAgendamento, LocalDate dataTransferencia) throws Exception;
+    TaxaTransferencia getTaxaPorIntervaloDias(LocalDate dataAgendamento, LocalDate dataTransferencia);
 
 }

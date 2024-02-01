@@ -40,12 +40,16 @@
                             min: 0,
                             align: 'left'
                         }"
-                        formControlName="valorTransferencia" matInput>
+                        formControlName="valorTransferencia" 
+                        maxlength="21"
+                        matInput>
                     <mat-error>
                         @if (control('valorTransferencia')?.hasError('min')) {
                             O valor mínimo para transferência deve ser de {{ minimumTransferValue | currency: 'BRL' }}
                         } @else if (control('valorTransferencia')?.hasError('required')) {
                             <ng-container [ngTemplateOutlet]="requiredError"></ng-container>
+                        } @else if (control('valorTransferencia')?.hasError('maxlength')) {
+                            O valor da transferência não deve ter mais de 19 dígitos
                         }
                     </mat-error>
                 </mat-form-field>
